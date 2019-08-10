@@ -26,6 +26,7 @@
 </template>
 
 <script>
+	import axios from 'axios'
 	export default {
 		data() {
 			return {
@@ -39,7 +40,17 @@
 
 		methods: {
 			singUp() {
-				window.alert('Holis');
+				axios.post('http://localhost:3000/api/user/sign_up', {
+					name: this.form.name,
+					email: this.form.email,
+					password: this.form.password
+				})
+				.then(response => {
+					this.$router.replace('/');
+				})
+				.catch(err => {
+					console.log(err)
+				});
 			}
 		}
 	}

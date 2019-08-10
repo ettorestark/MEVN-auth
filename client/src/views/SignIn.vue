@@ -23,6 +23,7 @@
 </template>
 
 <script>
+	import axios from 'axios'
 	export default {
 		data() {
 			return {
@@ -35,7 +36,16 @@
 
 		methods: {
 			signIn() {
-				window.alert('Holis');
+				axios.post('http://localhost:3000/api/user/sign_in', {
+					email: this.form.email,
+					password: this.form.password
+				})
+				.then(response => {
+					console.log(response.data.token);
+				})
+				.catch(err => {
+					console.log(err)
+				});
 			}
 		}
 	}
