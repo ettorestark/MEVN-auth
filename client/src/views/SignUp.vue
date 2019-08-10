@@ -6,13 +6,16 @@
 					<b>Sign UP</b>
 				</div>
 				<div class="form-group">
-					<input type="text" name="name" placeholder="Name" class="form-control" v-model="form.name">
+					<input type="text" name="name" placeholder="Name" class="form-control" :class="errors.name.status" v-model="form.name">
+					<div class="invalid-feedback">{{ errors.name.message }}</div>
 				</div>
 				<div class="form-group">
-					<input type="text" name="email" placeholder="E-mail" class="form-control" v-model="form.email">
+					<input type="text" name="email" placeholder="E-mail" class="form-control" :class="errors.email.status" v-model="form.email">
+										<div class="invalid-feedback">{{ errors.name.message }}</div>
 				</div>
 				<div class="form-group">
-					<input type="password" name="password" placeholder="Password" class="form-control" v-model="form.password">
+					<input type="password" name="password" placeholder="Password" class="form-control" :class="errors.password.status" v-model="form.password">
+					<div class="invalid-feedback">{{ errors.name.message }}</div>
 				</div>
 				<div class="form-group">
 					Al you ready have an account? <router-link to="/">Sign In</router-link>
@@ -31,26 +34,42 @@
 		data() {
 			return {
 				form: {
-					name: null,
-					email: null,
-					password: null
+					name: '',
+					email: '',
+					password: ''
+				},
+				errors: {
+					name: {
+						status: '',
+						message: ''
+					},
+
+					email: {
+						status: '',
+						message: ''
+					},
+
+					password: {
+						status: '',
+						message: ''
+					}
 				}
 			}
 		},
 
 		methods: {
-			singUp() {
-				axios.post('http://localhost:3000/api/user/sign_up', {
-					name: this.form.name,
-					email: this.form.email,
-					password: this.form.password
-				})
-				.then(response => {
-					this.$router.replace('/');
-				})
-				.catch(err => {
-					console.log(err)
-				});
+			async singUp() {
+				try {
+					const response = await axios.post('http://localhost:3000/api/user/sign_up',
+						{
+							name: this.form.name,
+							email: this.form.email,
+							password: this.form.password
+						});
+					console.log(response);
+				}catch(err) {
+					console.log(err.message);
+				}
 			}
 		}
 	}

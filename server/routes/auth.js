@@ -17,21 +17,16 @@ router.post('/sign_up', (req, res) => {
 
 	Joi.validate(data, schema, async (err, value) => {
 		if(err) {
-			res.status(422).json({
-				message: 'Invalid request data',
-				error: {
-					input: err.details[0].path[0],
-					message: err.details[0].message.split('" ')[1]
-				}
+			res.status(400).json({
+				input: err.details[0].path[0],
+				message: err.details[0].message.split('" ')[1]
 			});
 		}else {
 			//Verify if the user exists
 			let emailExist = await User.findOne({ email: req.body.email });
 			if(emailExist) return res.status(400).json({
-				error: {
-					input: 'email',
-					message: 'Email already exists'
-				}
+				input: 'email',
+				message: 'Email already exists'
 			});
 
 			let salt = await bcrypt.genSalt(10);
@@ -68,7 +63,7 @@ router.post('/sign_in', (req, res) => {
 
 	Joi.validate(data, schema, async (err, value) => {
 		if(err) {
-			res.status(422).json({
+			res.status(400).json({
 				message: 'Invalid request data',
 				error: {
 					input: err.details[0].path[0],
@@ -78,10 +73,8 @@ router.post('/sign_in', (req, res) => {
 		}else {
 			let user = await User.findOne({ email: req.body.email });
 			if(!user) return res.status(400).json({
-				error: {
-					input: 'email',
-					message: 'Email already exists'
-				}
+				input: 'email',
+				message: 'Email already exists'
 			});
 
 			let validPass = await bcrypt.compare(req.body.password, user.password);
