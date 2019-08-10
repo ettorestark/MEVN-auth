@@ -1,4 +1,5 @@
 const router = require('express').Router();
+require('dotenv').config()
 const User = require('../models/User');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
@@ -72,7 +73,7 @@ router.post('/sign_in', (req, res) => {
 			let validPass = await bcrypt.compare(req.body.password, user.password);
 			if(!validPass) return res.status(400).send('Email or password is wrong');
 
-			let token = jwt.sign({userSaved}, 'secretPassword');
+			let token = jwt.sign({user}, process.env.SECRET_KEY);
 			res.json({
 				token
 			})	
